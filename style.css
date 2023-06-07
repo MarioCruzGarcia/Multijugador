@@ -1,72 +1,40 @@
-body{
-    background-color: black;
-}
-main{
+
+.container{
     width: 500px;
     height: 500px;
-    border: 1px  solid black;
-
+    margin-right: 500px;
     display:flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    background-color: pink  ;
-}
-
-.card{
-    width: 48px;
-    height: 48px;
-    border: 1px solid blue;
-}
-
-.objetivo{
-    background-color: green;
-}
-
-.actual{
-    background-color: orange;
-}
-.j2{
-    background-color:red;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* .container{
-    width: 500px;
-    height: 500px;
-    border: 1px  solid black;
-    margin: auto;
-    display:flex;
-    justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
 }
 .card{
-    width: 98px;
-    height: 98px;
-    border: 1px solid blue;
-    
+    background-color: rgb(191, 255, 1);
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
 }
 
 .objetivo{
-    background-color: green;
+    background-color: rgb(255, 255, 255);
 }
 
 .j1{
-    background-color: orange;
+    background-color: rgb(255, 0, 0);
 }
 
 .j2{
-    background-color: chocolate;
-} */
+    background-color: rgb(255, 0, 204);
+}
+body{
+    display: flex;
+    justify-content:flex-end;
+    margin-right:55px; 
+    margin-top: 55px;
+    background-color: coral;
+}
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+

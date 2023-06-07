@@ -1,230 +1,159 @@
+// Identifico la etiqueta main.
+// Coloco el flexbox
+let section = document.getElementsByTagName('section')[1];
+section.classList.add('container');
+
+// Coloco el numero de filas y columnas
+let nFilas = 15;
+let nColumnas = 15;
+
+let div, objetivo, j1, j2;
+
+let filas1, columnas1; //letras
+let filas2, columnas2; //flechas
+let filasFinal, columnasFinal;
+
+// Creamos el inicio del tablero
+document.addEventListener('DOMContentLoaded', inicio);
+
 /**
- * addEventListener('evento', funcion);
- * 
- * El metodo addEventListener relaciona la aparicion de un evento con la ejecucion de una funcion.
- * 
- * Este metodo se aplica sobre un elemento de HTML.
- * 
- * Sustituye al element.setAttribute('evento', 'funcion')
- * 
- * EVENTO LOAD
- * Evento que hace referencia a cuando la pagina web carga completamente.
- * NO AFECTA SOBRE OTROS ELEMENTOS QUE NO SEAN BODY
- * 
+ * inicia el tanlero 
  */
-// Localizo etiqueta main
-let main = document.getElementsByTagName('main')[0];
-let body = document.getElementsByTagName('body')[0];
+function inicio() {
+  // Bucles para crear filas y columnas
+  for (let i = 0; i < nFilas; i++) {
+    for (let j = 0; j < nColumnas; j++) {
+      div = document.createElement('div');
+      div.classList.add('card');
+      div.setAttribute('id', `f${i}c${j}`);
 
-body.addEventListener('load', pintarTablero());
-
-
-function pintarTablero(){
-    let posicionObjetivo = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-    let posicionInicio = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-    let posicionj2 = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-    // console.log('has hecho un click')
-
-    for (let i = 0 ; i < 10; i ++){
-        for (let j = 0 ; j < 10; j ++){
-            let div = document.createElement('div');
-            div.classList.add('card');
-            main.appendChild(div);
-            /**
-             * Asigno la fila y la columna como clase en mi div
-             */
-            div.classList.add(i+'f');
-            div.classList.add(j+'c');
-            /**
-             * Para pintar una casilla, le damos color de fondo
-             */
-            if(i == posicionObjetivo[0] && j == posicionObjetivo[1]){
-                div.classList.add('objetivo');
-                console.log(div.classList);
-                console.log('Estamos en la fila: ' + parseInt(div.classList[1]));
-                console.log('Estamos en la columna: ' + parseInt(div.classList[2]));
-            }
-            if(i == posicionInicio[0] && j == posicionInicio[1]){
-                div.classList.add('actual');
-                console.log(div.classList);
-                console.log('Estamos en la fila: ' + parseInt(div.classList[1]));
-                console.log('Estamos en la columna: ' + parseInt(div.classList[2]));
-            }
-            if(i == posicionj2[0] && j == posicionj2[1]){
-                div.classList.add('j2');
-                console.log(div.classList);
-                console.log('Estamos en la fila: ' + parseInt(div.classList[1]));
-                console.log('Estamos en la columna: ' + parseInt(div.classList[2]));
-            }
-        }
+      section.appendChild(div);
     }
+  }
+  colocarFichas();
 }
 
 /**
- * Necesito cualquier evento de tecla para poder mover el color de la casilla
- * -    DONDE:                              El evento lo aplico sobre todo el documento HTML (uso document.) 
- * -    EVENTO:                             El evento elegido es 'keydown'.
- * -    FUNCION EJECUTADA:                  La funcion elegida es 'mover'.
- * -    RELACION EVENTO, FUNCION Y LUGAR:   El metodo elegido es addEventListener
- * 
-*/
+ * coloca las casillas de forma aleatoria
+ */
+function colocarFichas() {
+  filasFinal = Math.floor(Math.random() * 15);
+  columnasFinal = Math.floor(Math.random() * 15);
+
+  objetivo = document.getElementById(`f${filasFinal}c${columnasFinal}`);
+  objetivo.classList.add('objetivo');
+
+  filas1 = Math.floor(Math.random() * 15);
+  columnas1 = Math.floor(Math.random() * 15);
+
+  j1 = document.getElementById(`f${filas1}c${columnas1}`);
+  j1.classList.add('j1');
+
+  filas2 = Math.floor(Math.random() * 15);
+  columnas2 = Math.floor(Math.random() * 15);
+
+  while (filas2 === filas1 && columnas2 === columnas1) {
+    filas2 = Math.floor(Math.random() * 15);
+    columnas2 = Math.floor(Math.random() * 15);
+  }
+
+  j2 = document.getElementById(`f${filas2}c${columnas2}`);
+  j2.classList.add('j2');
+}
+
 document.addEventListener('keydown', mover);
 
 /**
- * Esta funcion mover recibe por parametro objeto event que referencia a la clase KeyboardEvent
+ * Funcion que detecta el movimiento y ejecuta el cambio de posicion
+ * -    j1: mueve con flechas
+ * -    j2: mueve con letras
+ *
+ * @param {Object} event - Informacion sobre el evento que se ha ejecutado
  */
-function mover(event){
-    // console.log(event['key']);
-    switch (event['key']) {
-        case 'ArrowUp':
-            console.log('has pulsado la tecla hacia arriba')
-            break;
-        case 'ArrowDown':
-            console.log('has pulsado la tecla hacia abajo')
-        break;
-        case 'ArrowLeft':
-            console.log('has pulsado la tecla hacia izquierda')
-            break;
-        case 'ArrowRight':
-            console.log('has pulsado la tecla hacia derecha')
-        break;
-    
-        default:
-            break;
-    }
+function mover(event) {
+  switch (event.key) {
+    case 'w':
+      moverJugador(filas1, columnas1, -1, 0, 'j1');
+      break;
+    case 'a':
+      moverJugador(filas1, columnas1, 0, -1, 'j1');
+      break;
+    case 's':
+      moverJugador(filas1, columnas1, 1, 0, 'j1');
+      break;
+    case 'd':
+      moverJugador(filas1, columnas1, 0, 1, 'j1');
+      break;
+    case 'ArrowUp':
+      moverJugador(filas2, columnas2, -1, 0, 'j2');
+      break;
+    case 'ArrowDown':
+      moverJugador(filas2, columnas2, 1, 0, 'j2');
+      break;
+    case 'ArrowLeft':
+      moverJugador(filas2, columnas2, 0, -1, 'j2');
+      break;
+    case 'ArrowRight':
+      moverJugador(filas2, columnas2, 0, 1, 'j2');
+      break;
+  }
+  ganar();
 }
 
-/**
- * Creamos dos clases distintas:
- * -    objetivo:   corresponde al punto donde tengo que llegar
- * -    actual:     corresponde al punto actual
- */
+function moverJugador(filas, columnas, filasDelta, columnasDelta, jugadorClass) {
+  const currentJugador = document.getElementById(`f${filas}c${columnas}`);
+  currentJugador.classList.remove(jugadorClass);
 
-/**
- * EL ALGORITMO MARIO GARCIA
- * -    En cada div necesitamos tener el valor de cada fila y cada columna en la clase.
- * -    Introducir la 'i' y 'j' en la funcion que crea el tablero (i --> fila, j --> columna).
- * -    Para recoger estas filas y columnas de cada div, utilizamos classList para recoger el valor.
- * -    Para mover las casillas compruebo el valor de estas filas y columnas y opero
- */
+  filas += filasDelta;
+  columnas += columnasDelta;
 
+  if (filas < 0) {
+    filas = nFilas - 1;
+  } else if (filas >= nFilas) {
+    filas = 0;
+  }
 
+  if (columnas < 0) {
+    columnas = nColumnas - 1;
+  } else if (columnas >= nColumnas) {
+    columnas = 0;
+  }
 
+  const newJugador = document.getElementById(`f${filas}c${columnas}`);
+  newJugador.classList.add(jugadorClass);
 
+  if (jugadorClass === 'j1') {
+    filas1 = filas;
+    columnas1 = columnas;
+  } else if (jugadorClass === 'j2') {
+    filas2 = filas;
+    columnas2 = columnas;
+  }
+}
 
+function ganar() {
+  if (filas1 === filasFinal && columnas1 === columnasFinal) {
+    alert('Ha ganado el jugador 1');
+    document.removeEventListener('keydown', mover);
+  } else if (filas2 === filasFinal && columnas2 === columnasFinal) {
+    alert('Ha ganado el jugador 2');
+    document.removeEventListener('keydown', mover);
+  }
+}
 
+function reinicio() {
+  document.addEventListener('keydown', mover);
 
+  const jugador1 = document.getElementById(`f${filas1}c${columnas1}`);
+  jugador1.classList.remove('j1');
 
+  const jugador2 = document.getElementById(`f${filas2}c${columnas2}`);
+  jugador2.classList.remove('j2');
 
+  const objetivo = document.getElementById(`f${filasFinal}c${columnasFinal}`);
+  objetivo.classList.remove('objetivo');
 
+  colocarFichas();
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // Identifico la etiqueta main.
-// // Coloco el flexbox
-// let main = document.getElementsByTagName('main')[0];
-// main.classList.add('container');
-
-// // Coloco el numero de filas y columnas
-// let nFilas = 5;
-// let nColumnas = 5;
-
-// let posicionObjetivo = [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)];
-// let posicionInicio = [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)];
-
-// let div, objetivo, j1, j2;
-
-// // Creamos el inicio del tablero
-// document.addEventListener('load', inicio());
-
-// /**
-//  * Funcion que inicia el tablero (CON TODO LO NECESARIO)
-//  */
-// function inicio(){
-//     // Bucles para crear filas y columas
-//     for (let i = 0; i < nFilas; i++){
-
-//         for(let j = 0;  j < nColumnas; j++){
-//             if(i == posicionObjetivo[0] && j ==posicionObjetivo[1]){
-//                 console.log(posicionObjetivo)
-//             }
-//             div = document.createElement('div'); 
-//             div.classList.add('card');
-//             div.setAttribute('id', `f${i}c${j}`);
-
-//             main.appendChild(div);
-//         }
-//     }
-//     colocarFichas();
-// }
-
-// /**
-//  * Function que coloca las casillas inicialmente (ALEATORIO TODO)
-//  */
-// function colocarFichas(){
-//     objetivo = document.getElementById('f4c4');
-//     objetivo.classList.add('objetivo');
-
-//     j1 = document.getElementById('f1c3');
-//     j1.classList.add('j1');
-
-//     j2 = document.getElementById('f3c0');
-//     j2.classList.add('j2');
-// }
-
-// // Creamos el evento de escucha de tecaldo
-// document.addEventListener('keydown', mover);
-
-// /**
-//  * Funcion que detecta el movimiento y ejecuta el cambio de posicion
-//  * -    j1: mueve con flechas
-//  * -    j2: mueve con wasd
-//  * 
-//  * @param {Object} event - Informacion sobre el evento que se ha ejecutado  
-//  */
-// function mover(event){
-//     console.log(event);
-//     /**
-//      * Identificamos con el objeto KeyboardEvent cual es la tecla que estoy pulsando.
-//      * -    key
-//      * -    code
-//      */
-// }
-
-// /**
-//  * PENDIENTE:
-//  * 1. Mover casillas.
-//  * 2. Que hago con los limites.
-//  * 3. (colision entre dos jugadores. QUE HAGO).
-//  * 4. Que hago cuando gano.
-//  * 5. OBGLITAGORIO. Boton reinicio para ejecutar de nuevo la funcion inicio.
-//  * 6. Contadores para puntuacion??
-//  * 7. Eliminar evento de teclado cuando hay un ganador.
-//  * 8. CSS BIEN.
-//  * 9. OPCIONAL. Contador de tiempo antes de poder iniciar el juego(tablero pintado pero sin posibilidad de ejecutar eventos de teclado)
-//  */
+document.getElementById('reiniciar').addEventListener('click', reinicio);
